@@ -12,19 +12,22 @@ const CooSVG: FC<CooSVGProps> = ({ src }) => {
     useEffect(() => {
         const current = box.current
         if (current?.hasChildNodes()) {
-            current.childNodes.forEach(node=>{
+            current.childNodes.forEach(node => {
                 current.removeChild(node)
             })
         }
         const SVG = core(src).then(res => {
-            const a = document.getElementById('test')
             current?.append(res)
         })
 
     }, [src])
 
+    const customVariable = {
+        '--width': '100px'
+    }
+
     return (
-        <span ref={box} ></span>
+        <span ref={box} style={{ ...(customVariable as React.CSSProperties) }} ></span>
     )
 }
 
