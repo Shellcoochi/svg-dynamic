@@ -1,12 +1,27 @@
-import { FC, useRef, useEffect, useState } from 'react'
+import { FC, useRef, useEffect, useState, CSSProperties } from 'react'
 import core from '../core'
-import './index.css'
+import './index.less'
 
-interface CooSVGProps {
-    src: string
+const animations = {
+    'animation-path-drawing': {
+        easingFunction: 'ease-in'
+    }
 }
 
-const CooSVG: FC<CooSVGProps> = ({ src }) => {
+export type animationType = keyof typeof animations
+
+export interface CooSVGProps {
+    src: string
+    animation: animationType
+    width?: string
+    height?: string
+    duration?: string
+    delay?: string
+    times?: number | 'infinite'
+}
+
+
+const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s', times = 'infinite' }) => {
     const box = useRef<HTMLSpanElement>(null)
 
     useEffect(() => {
@@ -16,18 +31,19 @@ const CooSVG: FC<CooSVGProps> = ({ src }) => {
                 current.removeChild(node)
             })
         }
-        const SVG = core(src).then(res => {
+        core(src, `${animation} ${duration} ${animations[animation].easingFunction} ${times}`).then(res => {
             current?.append(res)
         })
 
     }, [src])
 
     const customVariable = {
-        '--width': '100px'
+        '--svg_dynamic_width': width,
+        '--svg_dynamic_height': height
     }
 
     return (
-        <span ref={box} style={{ ...(customVariable as React.CSSProperties) }} ></span>
+        <span ref={box} style={{ ...(customVariable as CSSProperties) }} ></span>
     )
 }
 
