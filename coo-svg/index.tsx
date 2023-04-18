@@ -15,13 +15,14 @@ export interface CooSVGProps {
     animation: animationType
     width?: string
     height?: string
+    strokeWidth?: string
     duration?: string
     delay?: string
     times?: number | 'infinite'
 }
 
 
-const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s', times = 'infinite' }) => {
+const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s', times = 'infinite', strokeWidth }) => {
     const box = useRef<HTMLSpanElement>(null)
 
     useEffect(() => {
@@ -31,7 +32,7 @@ const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s
                 current.removeChild(node)
             })
         }
-        core(src, `${animation} ${duration} ${animations[animation].easingFunction} ${times}`).then(res => {
+        core(src, `${animation} ${duration} ${animations[animation].easingFunction} ${times}`, strokeWidth).then(res => {
             current?.append(res)
         })
 
