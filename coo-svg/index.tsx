@@ -29,6 +29,7 @@ const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s
     }, [src])
 
     const customVariable = {
+        'display':'inline-block',
         '--svg_dynamic_width': width,
         '--svg_dynamic_height': height
     }
