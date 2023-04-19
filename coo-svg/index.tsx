@@ -1,28 +1,18 @@
 import { FC, useRef, useEffect, useState, CSSProperties } from 'react'
-import core from '../core'
+import core, { AnimationProps, AnimationNames } from '../core'
 import './index.less'
 
-const animations = {
-    'animation-path-drawing': {
-        easingFunction: 'ease-in'
-    }
-}
+type AnimationTypes = keyof typeof AnimationNames
 
-export type animationType = keyof typeof animations
-
-export interface CooSVGProps {
+export interface CooSVGProps extends AnimationProps {
     src: string
-    animation: animationType
+    animation: AnimationTypes
     width?: string
     height?: string
     strokeWidth?: string
-    duration?: string
-    delay?: string
-    times?: number | 'infinite'
 }
 
-
-const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s', times = 'infinite', strokeWidth }) => {
+const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s', delay, times = 'infinite', strokeWidth }) => {
     const box = useRef<HTMLSpanElement>(null)
 
     useEffect(() => {
@@ -32,7 +22,7 @@ const CooSVG: FC<CooSVGProps> = ({ src, animation, width, height, duration = '3s
                 current.removeChild(node)
             })
         }
-        core(src, `${animation} ${duration} ${animations[animation].easingFunction} ${times}`, strokeWidth).then(res => {
+        core(src, { animation: AnimationNames[animation], duration, times, delay }, strokeWidth).then(res => {
             current?.append(res)
         })
 
